@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.ihome.soc.store.SocSessionStore;
 import com.ihome.soc.store.StoreType;
+import com.ihome.soc.util.SocConstants;
 
 /**
  * 默认的SocSessionManager的实现
@@ -63,6 +64,13 @@ public class SocDefaultSessionManager implements SocSessionManager {
 	 */
 	public void init(Properties properties) {
 		
+		// 内部字段
+		SessionAttributeConfig config = new SessionAttributeConfig();
+		config.setName(SocConstants.SOC_SESSION_ID);
+		config.setLifeTime(SocConstants.DEFAULT_LIFE_CYCLE);
+		config.setHttpOnly(true);
+		sessionAttributeConfigMap.put(config.getName(), config);
+		
 		// 拿到所有的字段
 		String key = null;
 		String value = properties.getProperty(SOC_ATTRIBUTS);
@@ -76,7 +84,7 @@ public class SocDefaultSessionManager implements SocSessionManager {
 		}
 		
 		for(String attribute : attributes) {
-			SessionAttributeConfig config = new SessionAttributeConfig();
+			config = new SessionAttributeConfig();
 			config.setName(attribute);
 			
 			// alias 默认使用 name

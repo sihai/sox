@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import com.ihome.soc.SocHttpContext;
 import com.ihome.soc.store.SocSessionStore;
 import com.ihome.soc.store.StoreType;
+import com.ihome.soc.util.SocConstants;
 
 /**
  * session的实现，对未经过包装的方法，一律代理给原来的SESSION，主要实现取得属性的方法
@@ -38,7 +39,6 @@ public class SocSession implements HttpSession {
     private Map<String, Object>     attributeMap        = new HashMap<String, Object>(); 					//session属性的内部保存
     private long               		createTime;
     private int                		maxInactiveInterval = 1800;
-    private static String      		JSESSION_ID         = "_SOC_SESSION_ID_"; //sessionID的值
 
     // session的管理器
     SocSessionManager 	sessionManager  = null;
@@ -55,13 +55,13 @@ public class SocSession implements HttpSession {
         this.request = request;
 
         //初始化 SESSIONID        
-        sessionId = (String) getAttribute(JSESSION_ID);
+        sessionId = (String) getAttribute(SocConstants.SOC_SESSION_ID);
         
-        if (StringUtils.isBlank( sessionId)) {
+        if (StringUtils.isBlank(sessionId)) {
             sessionId = UUID.randomUUID().toString();
 
             //并写入COOKIE中
-            setAttribute(JSESSION_ID, sessionId);
+            setAttribute(SocConstants.SOC_SESSION_ID, sessionId);
         }
     }
 	    
@@ -217,7 +217,7 @@ public class SocSession implements HttpSession {
 	 * @return
 	 */
 	public HttpServletRequest getRequest() {
-		return httpContext.getRequest();
+		return request;
 	}
 	
 	/**

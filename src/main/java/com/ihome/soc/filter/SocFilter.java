@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -49,19 +50,28 @@ public class SocFilter extends AbstractFilter {
         SocHttpContext httpContext = new SocHttpContext(req, response, getServletContext());
 
         req.setHttpContext(httpContext);
-        req.setAttribute("LAZY_COMMIT_RESPONSE", Boolean.TRUE);
+        //req.setAttribute("LAZY_COMMIT_RESPONSE", Boolean.TRUE);
         
         try {
         	chain.doFilter(req, response);
         } finally {
         	SocSession session = (SocSession)req.getSession();
         	if(null != session) {
+        		Cookie cookie = new Cookie("test2", "value");
+        		cookie.setPath("/");
+        		cookie.setMaxAge(1800);
+        		response.addCookie(cookie);
         		session.commit();
+        		// 
+        		if(response.containsHeader(SocConstants.SET_COOKIE) && !response.containsHeader("P3P")){
+        			response.setHeader("P3P", "CP='CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR'");
+        		}
         	}
         }
 	}
 
 	@Override
 	protected void releaseResource() {
+		
 	}
 }

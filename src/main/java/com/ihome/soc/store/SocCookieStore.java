@@ -41,8 +41,8 @@ public class SocCookieStore implements SocSessionStore {
 	
 	public static final Random  random = new SecureRandom();
 	
-	private Map<String, String> cookieMap        = new HashMap<String, String>();
-    private Map<String, Object> cachesAttributeMap = new HashMap<String, Object>();
+	private Map<String, String> cookieMap         = new HashMap<String, String>();
+    private Map<String, Object> cacheAttributeMap = new HashMap<String, Object>();
 	
     private SocSession session;
     private Map<String, SessionAttributeConfig> sessionAttributeConfigMap;
@@ -60,7 +60,6 @@ public class SocCookieStore implements SocSessionStore {
             String value = cookies[i].getValue();
 
             cookieMap.put(name, value);
-            cachesAttributeMap.put(name, value);
         }
     }
     
@@ -85,7 +84,7 @@ public class SocCookieStore implements SocSessionStore {
             return null;
         }
         String alias = config.getAlias();
-        Object value = (String) cachesAttributeMap.get(alias);
+        Object value = (String) cacheAttributeMap.get(alias);
         if (null != value) {
         	if(!(value instanceof Null)) {
         		return value;
@@ -99,7 +98,7 @@ public class SocCookieStore implements SocSessionStore {
         if (null != cookieValue) {
             Object v = parseValue(config, cookieValue);
             // cache
-            cachesAttributeMap.put(key, null == v ? Null.getInstance() : v);
+            cacheAttributeMap.put(key, null == v ? Null.getInstance() : v);
         }
 
         return null;
