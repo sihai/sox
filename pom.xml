@@ -18,36 +18,6 @@
   
 	<repositories>
 	</repositories>
-	
-	<build>
-		<finalName>soc</finalName>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-					<encoding>${java.encoding}</encoding>
-				</configuration>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
-				<executions>
-					<execution>
-					<id>attach-sources</id>
-					<phase>verify</phase>
-					<goals>
-						<goal>jar-no-fork</goal>
-					</goals>
-					</execution>
-				</executions>
-			</plugin>
-		
-		</plugins>
-	</build>
 
 	<dependencies>
 	    
@@ -83,7 +53,49 @@
 			<artifactId>servlet-api</artifactId>
 			<version>2.4</version>
 			<scope>provided</scope>
-		</dependency>	
-    	
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.6</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+            
 	</dependencies>
+	
+	<build>
+		<finalName>soc</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${java.encoding}</encoding>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+					<id>attach-sources</id>
+					<phase>verify</phase>
+					<goals>
+						<goal>jar-no-fork</goal>
+					</goals>
+					</execution>
+				</executions>
+			</plugin>
+		
+		</plugins>
+	</build>
 </project>
