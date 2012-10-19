@@ -15,7 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Blowfish¼Ó½âÃÜµÄ·½·¨
+ * BlowfishåŠ è§£å¯†çš„æ–¹æ³•
  * @author sihai
  *
  */
@@ -40,7 +40,7 @@ public class BlowfishEncrypter {
     public BlowfishEncrypter() {}
 
     /**
-     * ³õÊ¼»¯
+     * åˆå§‹åŒ–
      */
     public void init() {
     	try {
@@ -81,7 +81,7 @@ public class BlowfishEncrypter {
     }
 
     /**
-     * ¼ÓÃÜµÄ·½·¨
+     * åŠ å¯†çš„æ–¹æ³•
      * @param str
      * @return
      */
@@ -103,7 +103,7 @@ public class BlowfishEncrypter {
     }
 
     /**
-     * ½âÃÜµÄ·½·¨
+     * è§£å¯†çš„æ–¹æ³•
      * @param str
      * @return
      */

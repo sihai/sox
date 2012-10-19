@@ -19,7 +19,7 @@ import com.ihome.soc.store.SocSessionStore;
 import com.ihome.soc.store.StoreType;
 
 /**
- * Ä¬ÈÏµÄSocSessionManagerµÄÊµÏÖ
+ * é»˜è®¤çš„SocSessionManagerçš„å®ç°
  * @author sihai
  *
  */
@@ -27,24 +27,24 @@ public class SocDefaultSessionManager implements SocSessionManager {
 
 	private final Log logger  = LogFactory.getLog(getClass());
 	
-	// session´æ´¢µÄÉèÖÃ
+	// sessionå­˜å‚¨çš„è®¾ç½®
     private Map<StoreType, SocSessionStore> storeMap = new HashMap<StoreType, SocSessionStore>();
     
-    // ÊôĞÔÖµµÄÅäÖÃ
-    private Map<String, SessionAttributeConfig> sessionAttributeConfigMap = new HashMap<String, SessionAttributeConfig>(); //½âÎö³É¶ÔÏóµÄÅäÖÃÎÄ¼ş
+    // å±æ€§å€¼çš„é…ç½®
+    private Map<String, SessionAttributeConfig> sessionAttributeConfigMap = new HashMap<String, SessionAttributeConfig>(); //è§£ææˆå¯¹è±¡çš„é…ç½®æ–‡ä»¶
     
-	// µ±Ç°¹ÜÀíµÄsession
+	// å½“å‰ç®¡ç†çš„session
 	ThreadLocal<SocSession> threadLocal = new ThreadLocal<SocSession>();
 	
 	/**
-	 * Ê¹ÓÃÄ¬ÈÏµÄ<code>CONFIG_FILE_NAME</code>³õÊ¼»¯
+	 * ä½¿ç”¨é»˜è®¤çš„<code>CONFIG_FILE_NAME</code>åˆå§‹åŒ–
 	 */
 	public void init() {
 		init(CONFIG_FILE_NAME);
 	}
 	
 	/**
-	 * Ê¹ÓÃÖ¸¶¨µÄÅäÖÃÎÄ¼ş³õÊ¼»¯, ÅäÖÃÎÄ¼şÎ»ÓÚclasspathÏÂ
+	 * ä½¿ç”¨æŒ‡å®šçš„é…ç½®æ–‡ä»¶åˆå§‹åŒ–, é…ç½®æ–‡ä»¶ä½äºclasspathä¸‹
 	 * @param configFileName
 	 */
 	public void init(String configFileName) {
@@ -58,12 +58,12 @@ public class SocDefaultSessionManager implements SocSessionManager {
 	}
 	
 	/**
-	 * Ê¹ÓÃÖÆ¶¨µÄProperties³õÊ¼»¯
+	 * ä½¿ç”¨åˆ¶å®šçš„Propertiesåˆå§‹åŒ–
 	 * @param properties
 	 */
 	public void init(Properties properties) {
 		
-		// ÄÃµ½ËùÓĞµÄ×Ö¶Î
+		// æ‹¿åˆ°æ‰€æœ‰çš„å­—æ®µ
 		String key = null;
 		String value = properties.getProperty(SOC_ATTRIBUTS);
 		if(StringUtils.isBlank(value)) {
@@ -79,14 +79,14 @@ public class SocDefaultSessionManager implements SocSessionManager {
 			SessionAttributeConfig config = new SessionAttributeConfig();
 			config.setName(attribute);
 			
-			// alias Ä¬ÈÏÊ¹ÓÃ name
+			// alias é»˜è®¤ä½¿ç”¨ name
 			config.setAlias(attribute);
 			value = properties.getProperty(String.format("%s.%s.%s", SOC_ATTRIBUT, attribute, SessionAttributeConfig.ALIAS));
 			if(StringUtils.isNotBlank(value)) {
 				config.setAlias(StringUtils.trim(value));
 			}
 			
-			// storeTypeÄ¬ÈÏcookie
+			// storeTypeé»˜è®¤cookie
 			key = String.format("%s.%s.%s", SOC_ATTRIBUT, attribute, SessionAttributeConfig.STORE_TYPE);
 			value = properties.getProperty(key);
 			if(StringUtils.isNotBlank(value)) {
@@ -102,7 +102,7 @@ public class SocDefaultSessionManager implements SocSessionManager {
 				config.setStoreType(type);
 			}
 						
-			// isBase64 Ä¬ÈÏfalse
+			// isBase64 é»˜è®¤false
 			key = String.format("%s.%s.%s", SOC_ATTRIBUT, attribute, SessionAttributeConfig.IS_BASE64);
 			value = properties.getProperty(key);
 			if(StringUtils.isNotBlank(value)) {
@@ -115,7 +115,7 @@ public class SocDefaultSessionManager implements SocSessionManager {
 				}
 			}
 			
-			// isEncryptÄ¬ÈÏfalse
+			// isEncrypté»˜è®¤false
 			key = String.format("%s.%s.%s", SOC_ATTRIBUT, attribute, SessionAttributeConfig.IS_ENCRYPT);
 			value = properties.getProperty(key);
 			if(StringUtils.isNotBlank(value)) {
@@ -191,17 +191,16 @@ public class SocDefaultSessionManager implements SocSessionManager {
 			Entry<String, Boolean> e = iterator.next();
 			String key = e.getKey();
 			if(e.getValue().booleanValue()) {
-				//È¡µÃËüµÄSTORE, ±£´æËü
+				//å–å¾—å®ƒçš„STORE, ä¿å­˜å®ƒ
 				SessionAttributeConfig config = sessionAttributeConfigMap.get(key);
 				
 				if (null == config) {
 					continue;
 				}
 				
-				//È¡µÃ¸ÃKEYÅäÖÃµÄSTORE        ´Ë´¦Ğè·ÀÖ¹Ã»ÓĞÈ¡µ½STORE
+				//å–å¾—è¯¥KEYé…ç½®çš„STORE        æ­¤å¤„éœ€é˜²æ­¢æ²¡æœ‰å–åˆ°STORE
 		        StoreType type = config.getStoreType();
-		        SocSessionStore store = (SocSessionStore)getSession().getSessionStore(type);
-
+		        SocSessionStore store = getStore(type);
 		        store.save(this.getSession().getHttpContext(), key);
 			}			
 		}		
@@ -209,11 +208,11 @@ public class SocDefaultSessionManager implements SocSessionManager {
 
 	@Override
 	public void invalidate() {
-		// ±éÀúÅäÖÃ£¬ÔÙ×ª¸ø±£´æµÄSTORE´¦Àí
+		// éå†é…ç½®ï¼Œå†è½¬ç»™ä¿å­˜çš„STOREå¤„ç†
 		for (Iterator<Entry<String, SessionAttributeConfig>> iterator = sessionAttributeConfigMap.entrySet().iterator(); iterator.hasNext();) {
 			Entry<String, SessionAttributeConfig> e = iterator.next();
 			SessionAttributeConfig config = e.getValue();
-			if (config.getLifeTime() <= 0 && null != config.getStoreType()) { // ËµÃ÷ĞèÒª´¦Àí
+			if (config.getLifeTime() <= 0 && null != config.getStoreType()) { // è¯´æ˜éœ€è¦å¤„ç†
 				getStore(config.getStoreType()).invalidate(e.getKey());
 			}
 		}	
@@ -226,7 +225,7 @@ public class SocDefaultSessionManager implements SocSessionManager {
 	
 	@Override
 	public Object getAttribute(String key) {
-		//È¡µÃ¸ÃkeyÅäÖÃµÄstore
+		//å–å¾—è¯¥keyé…ç½®çš„store
         SessionAttributeConfig config = (SessionAttributeConfig)sessionAttributeConfigMap.get(key);
         StoreType storeType = config.getStoreType();
         SocSessionStore store = getStore(storeType);
@@ -251,7 +250,7 @@ public class SocDefaultSessionManager implements SocSessionManager {
 	private SocSessionStore getStore(StoreType storeType) {
 		SocSessionStore store = this.getSession().getSessionStore(storeType);
 
-        //Èç¹ûµ±Ç°»·¾³ÉÏÏÂÎÄÖĞÃ»ÓĞSTORE£¬ÔòĞÂ½¨Ò»¸ö¡£
+        //å¦‚æœå½“å‰ç¯å¢ƒä¸Šä¸‹æ–‡ä¸­æ²¡æœ‰STOREï¼Œåˆ™æ–°å»ºä¸€ä¸ªã€‚
         if(null == store) {
             store = (SocSessionStore)SocSessionStoreFactory.newInstance(storeType);
             Map<String, Object> context = new HashMap<String, Object>();

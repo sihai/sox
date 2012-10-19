@@ -9,15 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * ÉÏÏÂÎÄ
+ * ä¸Šä¸‹æ–‡
  * @author sihai
  *
  */
 public class SocHttpContext {
 
-	private HttpServletRequest  request;			//	HTTP ÇëÇó
-    private HttpServletResponse response;			//  HTTP ÏìÓ¦
-    private ServletContext      servletContext; 	//	ServletÉÏÏÂÎÄ
+	private HttpServletRequest  request;			//	HTTP è¯·æ±‚
+    private HttpServletResponse response;			//  HTTP å“åº”
+    private ServletContext      servletContext; 	//	Servletä¸Šä¸‹æ–‡
 
     public SocHttpContext(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) {
     	this.request  = request;

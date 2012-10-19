@@ -29,14 +29,14 @@ public class SocRequest extends HttpServletRequestWrapper {
 	}
 	
 	/**
-     * 返回经过封装的SESSION
+     * 杩斿洖缁忚繃灏佽鐨凷ESSION
      */
     public HttpSession getSession() {
         return socSession;
     }
     
     /**
-     * 返回经过封装的SESSION
+     * 杩斿洖缁忚繃灏佽鐨凷ESSION
      */
     public HttpSession getSession(boolean create) {
     	return socSession;

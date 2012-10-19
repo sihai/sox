@@ -21,7 +21,7 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * ËùÓĞfilterµÄ»ùÀà¡£
+ * æ‰€æœ‰filterçš„åŸºç±»ã€‚
  * @author sihai
  *
  */
@@ -40,19 +40,19 @@ public abstract class AbstractFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		
-		// ¶ÔÓÚÖØÈëµÄfilter£¬²»Ïû»¯exception¡£
-        // ÔÚweblogicÖĞ£¬servlet forwardµ½jspÊ±£¬jspÈÔ»áµ÷ÓÃ´Ëfilter£¬¶øjspÅ×³öµÄÒì³£¾Í»á±»¸Ãfilter²¶»ñ¡£
+		// å¯¹äºé‡å…¥çš„filterï¼Œä¸æ¶ˆåŒ–exceptionã€‚
+        // åœ¨weblogicä¸­ï¼Œservlet forwardåˆ°jspæ—¶ï¼Œjspä»ä¼šè°ƒç”¨æ­¤filterï¼Œè€ŒjspæŠ›å‡ºçš„å¼‚å¸¸å°±ä¼šè¢«è¯¥filteræ•è·ã€‚
         if (!(request instanceof HttpServletRequest && response instanceof HttpServletResponse)
                     || null != (request.getAttribute(getClass().getName()))) {
             chain.doFilter(request, response);
             return;
         }
 
-        // ·ÀÖ¹ÖØÈë.
+        // é˜²æ­¢é‡å…¥.
         request.setAttribute(getClass().getName(), Boolean.TRUE);
 
         try {
-            // Ö´ĞĞ×ÓÀàµÄdoFilter
+            // æ‰§è¡Œå­ç±»çš„doFilter
             HttpServletRequest  req = (HttpServletRequest) request;
             HttpServletResponse res = (HttpServletResponse) response;
 
@@ -63,25 +63,25 @@ public abstract class AbstractFilter implements Filter {
 	}
 	
 	/**
-	 * ³õÊ¼»¯filter¡£
+	 * åˆå§‹åŒ–filterã€‚
 	 * @throws ServletException
 	 */
 	protected abstract void init() throws ServletException;
 	
 	/**
-     * Ö´ĞĞfilter.
+     * æ‰§è¡Œfilter.
      *
-     * @param request HTTPÇëÇó
-     * @param response HTTPÏìÓ¦
-     * @param chain filterÁ´
+     * @param request HTTPè¯·æ±‚
+     * @param response HTTPå“åº”
+     * @param chain filteré“¾
      *
-     * @throws IOException ´¦ÀífilterÁ´Ê±·¢ÉúÊäÈëÊä³ö´íÎó
-     * @throws ServletException ´¦ÀífilterÁ´Ê±·¢ÉúµÄÒ»°ã´íÎó
+     * @throws IOException å¤„ç†filteré“¾æ—¶å‘ç”Ÿè¾“å…¥è¾“å‡ºé”™è¯¯
+     * @throws ServletException å¤„ç†filteré“¾æ—¶å‘ç”Ÿçš„ä¸€èˆ¬é”™è¯¯
      */
     public abstract void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException;
 	
     /**
-	 * ÊÍ·Å×ÊÔ´
+	 * é‡Šæ”¾èµ„æº
 	 */
 	protected abstract void releaseResource();
 	
@@ -93,54 +93,54 @@ public abstract class AbstractFilter implements Filter {
 	}
 	
 	/**
-     * È¡µÃfilterµÄÅäÖÃĞÅÏ¢¡£
+     * å–å¾—filterçš„é…ç½®ä¿¡æ¯ã€‚
      *
-     * @return <code>FilterConfig</code>¶ÔÏó
+     * @return <code>FilterConfig</code>å¯¹è±¡
      */
     public FilterConfig getFilterConfig() {
         return config;
     }
     
 	/**
-     * È¡µÃservletÈİÆ÷µÄÉÏÏÂÎÄĞÅÏ¢¡£
+     * å–å¾—servletå®¹å™¨çš„ä¸Šä¸‹æ–‡ä¿¡æ¯ã€‚
      *
-     * @return <code>ServletContext</code>¶ÔÏó
+     * @return <code>ServletContext</code>å¯¹è±¡
      */
     public ServletContext getServletContext() {
         return getFilterConfig().getServletContext();
     }
     
     /**
-     * ²éÕÒÖ¸¶¨µÄfilter³õÊ¼»¯²ÎÊı£¬°´ÈçÏÂË³Ğò£º
+     * æŸ¥æ‰¾æŒ‡å®šçš„filteråˆå§‹åŒ–å‚æ•°ï¼ŒæŒ‰å¦‚ä¸‹é¡ºåºï¼š
      * 
      * <ol>
      * <li>
-     * ²éÕÒfilter×ÔÉíµÄ<code>init-param</code>
+     * æŸ¥æ‰¾filterè‡ªèº«çš„<code>init-param</code>
      * </li>
      * <li>
-     * ²éÕÒwebÓ¦ÓÃÈ«¾ÖµÄ<code>init-param</code>
+     * æŸ¥æ‰¾webåº”ç”¨å…¨å±€çš„<code>init-param</code>
      * </li>
      * <li>
-     * Ê¹ÓÃÖ¸¶¨Ä¬ÈÏÖµ¡£
+     * ä½¿ç”¨æŒ‡å®šé»˜è®¤å€¼ã€‚
      * </li>
      * </ol>
      * 
      *
-     * @param parameterName ³õÊ¼»¯²ÎÊıÃû
-     * @param defaultValue Ä¬ÈÏÖµ
+     * @param parameterName åˆå§‹åŒ–å‚æ•°å
+     * @param defaultValue é»˜è®¤å€¼
      *
-     * @return Ö¸¶¨Ãû³ÆËù¶ÔÓ¦µÄ³õÊ¼»¯²ÎÊıÖµ£¬Èç¹ûÎ´¶¨Òå»ò²ÎÊıÖµÎª¿Õ£¬Ôò·µ»Ø<code>null</code>¡£
+     * @return æŒ‡å®šåç§°æ‰€å¯¹åº”çš„åˆå§‹åŒ–å‚æ•°å€¼ï¼Œå¦‚æœæœªå®šä¹‰æˆ–å‚æ•°å€¼ä¸ºç©ºï¼Œåˆ™è¿”å›<code>null</code>ã€‚
      */
     public String getInitParameter(String parameterName, String defaultValue) {
-        // È¡filter²ÎÊı
+        // å–filterå‚æ•°
         String value = trimToNull(getFilterConfig().getInitParameter(parameterName));
 
-        // Èç¹ûÎ´È¡µ½£¬ÔòÈ¡È«¾Ö²ÎÊı
+        // å¦‚æœæœªå–åˆ°ï¼Œåˆ™å–å…¨å±€å‚æ•°
         if (value == null) {
             value = trimToNull(getServletContext().getInitParameter(parameterName));
         }
 
-        // Èç¹ûÎ´È¡µ½£¬ÔòÈ¡Ä¬ÈÏÖµ
+        // å¦‚æœæœªå–åˆ°ï¼Œåˆ™å–é»˜è®¤å€¼
         if (value == null) {
             value = defaultValue;
         }
@@ -149,11 +149,11 @@ public abstract class AbstractFilter implements Filter {
     }
     
     /**
-     * È¡µÃrequestµÄÄÚÈİ(HTTP·½·¨, URI)
+     * å–å¾—requestçš„å†…å®¹(HTTPæ–¹æ³•, URI)
      *
-     * @param request HTTPÇëÇó
+     * @param request HTTPè¯·æ±‚
      *
-     * @return ×Ö·û´®
+     * @return å­—ç¬¦ä¸²
      */
     protected String dumpRequest(HttpServletRequest request) {
         String queryString = trimToNull(request.getQueryString());
@@ -161,11 +161,11 @@ public abstract class AbstractFilter implements Filter {
     }
     
     /**
-     * ½«×Ö·û´®trim£¬Èç¹û×Ö·û´®Îª¿Õ°×£¬Ôò·µ»Ø<code>null</code>¡£
+     * å°†å­—ç¬¦ä¸²trimï¼Œå¦‚æœå­—ç¬¦ä¸²ä¸ºç©ºç™½ï¼Œåˆ™è¿”å›<code>null</code>ã€‚
      *
-     * @param str ÊäÈë×Ö·û´®
+     * @param str è¾“å…¥å­—ç¬¦ä¸²
      *
-     * @return Êä³ö×Ö·û´®£¬Èç¹ûÊäÈë×Ö·û´®Îª¿Õ°×£¬Ôò·µ»Ø<code>null</code>
+     * @return è¾“å‡ºå­—ç¬¦ä¸²ï¼Œå¦‚æœè¾“å…¥å­—ç¬¦ä¸²ä¸ºç©ºç™½ï¼Œåˆ™è¿”å›<code>null</code>
      */
     protected String trimToNull(String str) {
         if (str != null) {

@@ -5,7 +5,7 @@
 package com.ihome.soc.session;
 
 /**
- * µ¥ÀıSocSessionManager¹¤³§
+ * å•ä¾‹SocSessionManagerå·¥å‚
  * @author sihai
  *
  */
@@ -13,12 +13,23 @@ public abstract class SocSingletonSessionManagerFactory {
 	
 	private static SocSessionManager sessionManager;
 	
-	static {
+	private static boolean inited = false;
+	
+	/**
+	 * 
+	 * @param configFileName
+	 */
+	public synchronized static void init(String configFileName) {
+		if(inited) {
+			return;
+		}
 		sessionManager = new SocDefaultSessionManager();
+		((SocDefaultSessionManager)sessionManager).init(configFileName);
+		inited = true;
 	}
 	
 	/**
-	 * ·µ»Øµ¥ÀıµÄÊµÀı
+	 * è¿”å›å•ä¾‹çš„å®ä¾‹
 	 */
 	public static SocSessionManager getInstance() {
 		return sessionManager;

@@ -7,7 +7,7 @@ package com.ihome.soc.session;
 import com.ihome.soc.store.StoreType;
 
 /**
- * sessionÅäÖÃ
+ * sessioné…ç½®
  * @author sihai
  *
  */
@@ -25,8 +25,8 @@ public class SessionAttributeConfig {
     private String       		name;
     private String       		alias;
     private StoreType 			storeType 	= StoreType.COOKIE;
-    private boolean      		isEncrypt   = false; 	//ÊÇ·ñĞèÒª¼ÓÃÜ
-    private boolean      		isBase64    = false; 	//ÊÇ·ñ×öBASE64
+    private boolean      		isEncrypt   = false; 	//æ˜¯å¦éœ€è¦åŠ å¯†
+    private boolean      		isBase64    = false; 	//æ˜¯å¦åšBASE64
     private String       		domain;
     private boolean      		isDirty     = false;
     private int          		lifeTime	 = -1;

@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import com.ihome.soc.filter.AbstractFilter;
 
 /**
- * ╟Эв╟акр╩об
+ * Е▄┘Хё┘Д╨├Д╦─Д╦▀
  * @author sihai
  *
  */

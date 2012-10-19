@@ -24,7 +24,7 @@ import com.ihome.soc.store.SocSessionStore;
 import com.ihome.soc.store.StoreType;
 
 /**
- * sessionµÄÊµÏÖ£¬¶ÔÎ´¾­¹ı°ü×°µÄ·½·¨£¬Ò»ÂÉ´úÀí¸øÔ­À´µÄSESSION£¬Ö÷ÒªÊµÏÖÈ¡µÃÊôĞÔµÄ·½·¨
+ * sessionçš„å®ç°ï¼Œå¯¹æœªç»è¿‡åŒ…è£…çš„æ–¹æ³•ï¼Œä¸€å¾‹ä»£ç†ç»™åŸæ¥çš„SESSIONï¼Œä¸»è¦å®ç°å–å¾—å±æ€§çš„æ–¹æ³•
  * 
  * @author sihai
  *
@@ -34,19 +34,19 @@ public class SocSession implements HttpSession {
 	private String             		sessionId           = null;
 	HttpServletRequest 				request				= null;
     private SocHttpContext     		httpContext         = null;
-	private Map<String, Boolean>	changedMarkMap      = new HashMap<String, Boolean>(); 	// ÊôĞÔĞŞ¸Ä±ê¼Ç
-    private Map<String, Object>     attributeMap        = new HashMap<String, Object>(); 					//sessionÊôĞÔµÄÄÚ²¿±£´æ
+	private Map<String, Boolean>	changedMarkMap      = new HashMap<String, Boolean>(); 	// å±æ€§ä¿®æ”¹æ ‡è®°
+    private Map<String, Object>     attributeMap        = new HashMap<String, Object>(); 					//sessionå±æ€§çš„å†…éƒ¨ä¿å­˜
     private long               		createTime;
     private int                		maxInactiveInterval = 1800;
-    private static String      		JSESSION_ID         = "_SOC_SESSION_ID_"; //sessionIDµÄÖµ
+    private static String      		JSESSION_ID         = "_SOC_SESSION_ID_"; //sessionIDçš„å€¼
 
-    // sessionµÄ¹ÜÀíÆ÷
+    // sessionçš„ç®¡ç†å™¨
     SocSessionManager 	sessionManager  = null;
     // 
     Map<StoreType, SocSessionStore> sessionStoreMap = new HashMap<StoreType, SocSessionStore>();
     
     /**
-     * ¹¹Ôìº¯Êı£¬ÒÔ±ã½«Í¨¹ıÏµÍ³»ñµÃÈİÆ÷µÄSESSION
+     * æ„é€ å‡½æ•°ï¼Œä»¥ä¾¿å°†é€šè¿‡ç³»ç»Ÿè·å¾—å®¹å™¨çš„SESSION
      *
      * @param session
      */
@@ -54,13 +54,13 @@ public class SocSession implements HttpSession {
         createTime   = System.currentTimeMillis();
         this.request = request;
 
-        //³õÊ¼»¯ SESSIONID        
+        //åˆå§‹åŒ– SESSIONID        
         sessionId = (String) getAttribute(JSESSION_ID);
         
         if (StringUtils.isBlank( sessionId)) {
             sessionId = UUID.randomUUID().toString();
 
-            //²¢Ğ´ÈëCOOKIEÖĞ
+            //å¹¶å†™å…¥COOKIEä¸­
             setAttribute(JSESSION_ID, sessionId);
         }
     }
@@ -108,23 +108,23 @@ public class SocSession implements HttpSession {
             return null;
         }
 
-        //Èç¹û¸ÃÊôĞÔÒÑ¾­´æÔÚ£¬ÔòÖ±½Ó·µ»Ø        
+        //å¦‚æœè¯¥å±æ€§å·²ç»å­˜åœ¨ï¼Œåˆ™ç›´æ¥è¿”å›        
         if (attributeMap.containsKey(name)) {
         	return attributeMap.get(name);
 		}
 
-        //Èç¹û²»´æÔÚ Ôò·ÖÁ½ÖÖÇé¿ö£º
-        //1¡¢sessionÅäÖÃÖĞÊÇ·ñ´æÔÚ  Èô²»´æÔÚ Ôò·µ»ØNULL
+        //å¦‚æœä¸å­˜åœ¨ åˆ™åˆ†ä¸¤ç§æƒ…å†µï¼š
+        //1ã€sessioné…ç½®ä¸­æ˜¯å¦å­˜åœ¨  è‹¥ä¸å­˜åœ¨ åˆ™è¿”å›NULL
         if (!getSessionManager().isExistKey(name)) {
             return null;
         }
 
-        //2¡¢Èç¹û´æÔÚ²¢¸Ä±äÁËÖµ Why? ±»É¾³ıÁË?
+        //2ã€å¦‚æœå­˜åœ¨å¹¶æ”¹å˜äº†å€¼ Why? è¢«åˆ é™¤äº†?
         if (changedMarkMap.containsKey(name)) {
 			return null;
 		}
         
-        //3¡¢Èç¹ûÅäÖÃÖĞ´æÔÚ£¬ÔòÊÔÍ¼´ÓÖ¸¶¨µÄÅäÖÃÖĞ¶ÁÈ¡¸ÃÖµ, ²¢´æÈë±»°ü×°µÄsessionÖĞ
+        //3ã€å¦‚æœé…ç½®ä¸­å­˜åœ¨ï¼Œåˆ™è¯•å›¾ä»æŒ‡å®šçš„é…ç½®ä¸­è¯»å–è¯¥å€¼, å¹¶å­˜å…¥è¢«åŒ…è£…çš„sessionä¸­
         Object attribute = getSessionManager().getAttribute(name);
 
         if (attribute != null) {
@@ -179,7 +179,7 @@ public class SocSession implements HttpSession {
 	}
 	
 	/**
-	 * ½«SESSIONÊ§Ğ§£¬Èç¹ûÊÇCOOKIEµÄ»°£¬½«ËùÓĞÊ±¼äÅäÖÃÎª-1µÄÈ«²¿Ê§Ğ§
+	 * å°†SESSIONå¤±æ•ˆï¼Œå¦‚æœæ˜¯COOKIEçš„è¯ï¼Œå°†æ‰€æœ‰æ—¶é—´é…ç½®ä¸º-1çš„å…¨éƒ¨å¤±æ•ˆ
 	 */
 	@Override
 	public void invalidate() {

@@ -29,7 +29,7 @@ import com.ihome.soc.util.Null;
 import com.ihome.soc.util.SocConstants;
 
 /**
- * »ùÓÚcookieµÄsession³Ö¾Ã»¯ÊµÏÖ
+ * åŸºäºcookieçš„sessionæŒä¹…åŒ–å®ç°
  * @author sihai
  *
  */
@@ -48,10 +48,10 @@ public class SocCookieStore implements SocSessionStore {
     private Map<String, SessionAttributeConfig> sessionAttributeConfigMap;
     
 	/**
-     * ³õÊ¼»¯COOKIEµÄÖµ¶Ô
+     * åˆå§‹åŒ–COOKIEçš„å€¼å¯¹
      */
     private void init(Cookie[] cookies) {
-        //½«cookiesµÄÖµ²ğ³Ékey->value
+        //å°†cookiesçš„å€¼æ‹†æˆkey->value
     	if (cookies == null) {
 			return ;
 		}
@@ -65,7 +65,7 @@ public class SocCookieStore implements SocSessionStore {
     }
     
     /**
-     * ³õÊ¼»¯
+     * åˆå§‹åŒ–
      */
     @Override
     public void init(Map<String, Object> context) {
@@ -77,7 +77,7 @@ public class SocCookieStore implements SocSessionStore {
 	@Override
 	public Object getAttribute(String key) {
 		
-		 //ÏÈÊÔÍ¼´ÓÁÙÊ±´æ´¢¿Õ¼äÖĞ·µ»Ø
+		 //å…ˆè¯•å›¾ä»ä¸´æ—¶å­˜å‚¨ç©ºé—´ä¸­è¿”å›
         SessionAttributeConfig config = (SessionAttributeConfig) sessionAttributeConfigMap.get(key);
 
         if (null == config) {
@@ -92,10 +92,10 @@ public class SocCookieStore implements SocSessionStore {
         	}
         }
 
-        //½øÒ»²½´ÓCOOKIEÖĞ½âÎö
+        //è¿›ä¸€æ­¥ä»COOKIEä¸­è§£æ
         String cookieValue = (String) cookieMap.get(alias);
 
-        //Èç¹ûÖµ²»¿ÕµÄ»°£¬Ôò¸ù¾İÅäÖÃÎÄ¼ş½øĞĞ½âÎö
+        //å¦‚æœå€¼ä¸ç©ºçš„è¯ï¼Œåˆ™æ ¹æ®é…ç½®æ–‡ä»¶è¿›è¡Œè§£æ
         if (null != cookieValue) {
             Object v = parseValue(config, cookieValue);
             // cache
@@ -112,7 +112,7 @@ public class SocCookieStore implements SocSessionStore {
 
 	@Override
 	public void save(SocHttpContext httpContext, String key) {
-		//¸ù¾İÕû¸öÅäÖÃÓëSESSIONµÄÖµÖØĞ´
+		//æ ¹æ®æ•´ä¸ªé…ç½®ä¸SESSIONçš„å€¼é‡å†™
         if (null != key) {
             try {
                 this.saveSingleKey(httpContext, key);
@@ -146,7 +146,7 @@ public class SocCookieStore implements SocSessionStore {
 	}
 
 	/**
-     * ¸ù¾İÅäÖÃÎÄ¼ş£¬¾ö¶¨ÈçºÎ½«cookieÖĞµÄ×Ö·û´®»ò×Ö½ÚÁ÷½âÎö³ÉºÏÊÊµÄ¶ÔÏó
+     * æ ¹æ®é…ç½®æ–‡ä»¶ï¼Œå†³å®šå¦‚ä½•å°†cookieä¸­çš„å­—ç¬¦ä¸²æˆ–å­—èŠ‚æµè§£ææˆåˆé€‚çš„å¯¹è±¡
      *
      * @param value
      *
@@ -170,12 +170,12 @@ public class SocCookieStore implements SocSessionStore {
             return ret;
         }
 
-        //Èç¹ûÊÇ¼ÓÃÜ¹ıµÄ
+        //å¦‚æœæ˜¯åŠ å¯†è¿‡çš„
         if (config.isEncrypt()) {
             BlowfishEncrypter encrypter = BlowfishEncrypter.getEncrypter();
             ret = encrypter.decrypt(ret);
             if (config.isBase64() && (ret != null) && (ret.length() > 6)) {
-                //È¥µôBASE64Ê±Ôö¼ÓµÄÍ·
+                //å»æ‰BASE64æ—¶å¢åŠ çš„å¤´
                 ret = ret.substring(6);
             }
         } else {
@@ -188,7 +188,7 @@ public class SocCookieStore implements SocSessionStore {
     }
     
     /**
-     * ±£´æµ¥¸öµÄÖµµ½cookieÖĞÈ¥
+     * ä¿å­˜å•ä¸ªçš„å€¼åˆ°cookieä¸­å»
      *
      * @param context
      * @param key
@@ -198,7 +198,7 @@ public class SocCookieStore implements SocSessionStore {
     private void saveSingleKey(SocHttpContext httpContext, String key) throws Exception {
         
     	HttpServletResponse response = httpContext.getResponse();
-        //·ÖÎö¸ÃKEYÊÇ·ñÊÇ×éºÏKEY
+        //åˆ†æè¯¥KEYæ˜¯å¦æ˜¯ç»„åˆKEY
         SessionAttributeConfig config = (SessionAttributeConfig) sessionAttributeConfigMap.get(key);
         this.saveCookie(response, config);
     }
@@ -214,7 +214,7 @@ public class SocCookieStore implements SocSessionStore {
         String cookieName = config.getAlias();
         int    lifeTime = config.getLifeTime();
 
-        //µÃµ½cookieµÄÖµ
+        //å¾—åˆ°cookieçš„å€¼
         String cookieValue = getCookieValue(config);
         Cookie cookie = null;
 
@@ -229,7 +229,7 @@ public class SocCookieStore implements SocSessionStore {
             logger.debug(String.format("cookie name: %s, cookie value: %s", cookieName, cookieValue));
         }
 
-        //ÉèÖÃÒ»Ğ©COOKIEµÄÆäËüÏà¹ØÊôĞÔ
+        //è®¾ç½®ä¸€äº›COOKIEçš„å…¶å®ƒç›¸å…³å±æ€§
         String cookiePath = DEFAULT_COOKIE_PATH;
         if (config.getCookiePath() != null) {
             cookiePath = config.getCookiePath();
@@ -246,8 +246,8 @@ public class SocCookieStore implements SocSessionStore {
         }
 
         if(config.isHttpOnly()) {
-        	// µ½Servlet 3.0ºó¾Í²»ĞèÒªÓÃÏÂÃæÕâ¶Î´úÂëÁË£¬¿ÉÒÔÖ±½Ócookie.setHttpOnly(true)
-        	// È»ºóresponse.addCookie(cookie);
+        	// åˆ°Servlet 3.0åå°±ä¸éœ€è¦ç”¨ä¸‹é¢è¿™æ®µä»£ç äº†ï¼Œå¯ä»¥ç›´æ¥cookie.setHttpOnly(true)
+        	// ç„¶åresponse.addCookie(cookie);
         	StringBuilder cookieBuilder = new StringBuilder();
         	cookieBuilder.append(cookieName);
         	cookieBuilder.append("=");
@@ -271,14 +271,14 @@ public class SocCookieStore implements SocSessionStore {
     }
     
     /**
-     * ¹¹Ôìcookie value
+     * æ„é€ cookie value
      *
      * @return
      *
      * @throws Exception
      */
     protected String getCookieValue(SessionAttributeConfig config) throws Exception {
-        //µÃµ½ĞèÒª±£´æµÄCOOKIEµÄÖµ,´Ë´¦Ğè½øÒ»²½¿¼ÂÇÊÇ·ñĞèÒªĞòÁĞ»¯
+        //å¾—åˆ°éœ€è¦ä¿å­˜çš„COOKIEçš„å€¼,æ­¤å¤„éœ€è¿›ä¸€æ­¥è€ƒè™‘æ˜¯å¦éœ€è¦åºåˆ—åŒ–
         String attributeValue = null;
         Object obj = session.getAttribute(config.getName());
 

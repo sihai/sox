@@ -5,7 +5,7 @@
 package com.ihome.soc.store;
 
 /**
- * Session Attribute Store¿‡–Õ
+ * Session Attribute Store Á±ªÂûã
  * <ol>
  * <li>
  * Over Cookie

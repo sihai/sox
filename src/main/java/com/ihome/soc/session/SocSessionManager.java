@@ -9,7 +9,7 @@ import com.ihome.soc.store.StoreType;
 
 
 /**
- * SessionµÄ¹ÜÀíÆ÷
+ * Sessionçš„ç®¡ç†å™¨
  * @author sihai
  *
  */
@@ -22,38 +22,38 @@ public interface SocSessionManager {
 	String SOC_ATTRIBUT = "soc.attribute";
 	
 	/**
-	 * ÉèÖÃËüËù¹ØÁªµÄsession
+	 * è®¾ç½®å®ƒæ‰€å…³è”çš„session
 	 * @param session
 	 */
 	void setSession(SocSession session);
 	
 	/**
-	 * È¡µÃmanagerËù¹ÜÀíµÄsession
+	 * å–å¾—manageræ‰€ç®¡ç†çš„session
 	 * @return
 	 */
 	SocSession getSession();
 	
 	/**
-	 * ±£´æ
+	 * ä¿å­˜
 	 *
 	 */
 	void save();
 	
 	/**
-	 * Ê¹¹ıÆÚµÄsessionÖµÊ§Ğ§
+	 * ä½¿è¿‡æœŸçš„sessionå€¼å¤±æ•ˆ
 	 *
 	 */
 	void invalidate();
 	
 	/**
-	 * ¸ù¾İstoreµÄÀàĞÍ·µ»ØÊµÏÖµÄstore
+	 * æ ¹æ®storeçš„ç±»å‹è¿”å›å®ç°çš„store
 	 * @param type
 	 * @return
 	 */
 	SocSessionStore getSessionStore(StoreType type);
 	
 	/**
-	 * ¶ÁÈ¡ÊôĞÔÖµ
+	 * è¯»å–å±æ€§å€¼
 	 * @param key
 	 * @return
 	 */
@@ -61,7 +61,7 @@ public interface SocSessionManager {
 	
 	
 	/**
-	 * ÅĞ¶ÏÒªÇóµÄkeyÊÇ·ñ´æÔÚÓÚÅäÖÃÎÄ¼şÖ®ÖĞ
+	 * åˆ¤æ–­è¦æ±‚çš„keyæ˜¯å¦å­˜åœ¨äºé…ç½®æ–‡ä»¶ä¹‹ä¸­
 	 * @param key
 	 * @return
 	 */

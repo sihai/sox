@@ -5,7 +5,7 @@
 package com.ihome.soc.util;
 
 /**
- * ±íÊ¾nulµÄ¶ÔÏó
+ * è¡¨ç¤ºnulçš„å¯¹è±¡
  * @author sihai
  *
  */

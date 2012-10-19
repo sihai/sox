@@ -11,14 +11,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.ihome.soc.SocHttpContext;
 import com.ihome.soc.SocRequest;
 import com.ihome.soc.crypter.BlowfishEncrypter;
 import com.ihome.soc.session.SocSession;
+import com.ihome.soc.session.SocSingletonSessionManagerFactory;
 import com.ihome.soc.util.SocConstants;
 
 /**
- * SOC»Îø⁄Filter
+ * SOCÂÖ•Âè£Filter
  * @author sihai
  *
  */
@@ -26,6 +29,13 @@ public class SocFilter extends AbstractFilter {
 
 	@Override
 	protected void init() throws ServletException {
+		// init session store factory
+		String configFile = getInitParameter(SocConstants.CONFIG_FILE, SocConstants.CONFIG_FILE);
+		if(StringUtils.isNotBlank(configFile)) {
+			SocSingletonSessionManagerFactory.init(configFile);
+		} else {
+			SocSingletonSessionManagerFactory.init(configFile);
+		}
 		// init encrypter
 		BlowfishEncrypter.setKey(getInitParameter(SocConstants.PARAMETER_KEY, SocConstants.DEFAULT_KEY));
 	}
@@ -43,8 +53,6 @@ public class SocFilter extends AbstractFilter {
         
         try {
         	chain.doFilter(req, response);
-        } catch (Throwable t) {
-        	
         } finally {
         	SocSession session = (SocSession)req.getSession();
         	if(null != session) {

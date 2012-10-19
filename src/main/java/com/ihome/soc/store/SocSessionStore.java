@@ -9,7 +9,7 @@ import java.util.Map;
 import com.ihome.soc.SocHttpContext;
 
 /**
- * ÓÃÀ´³Ö¾Ã»¯session attributeµÄ´æ´¢¡£
+ * ç”¨æ¥æŒä¹…åŒ–session attributeçš„å­˜å‚¨ã€‚
  * @author sihai
  *
  */
@@ -19,14 +19,14 @@ public interface SocSessionStore {
 	String CONFIG = "config";
 	
 	/**
-     * ³õÊ¼»¯Ã¿¸öSTOREµÄ»·¾³,°üÀ¨Á½¸ö²¿·Ö£º1¡¢ÊµÊ±Êı¾İ 2¡¢ÅäÖÃ
+     * åˆå§‹åŒ–æ¯ä¸ªSTOREçš„ç¯å¢ƒ,åŒ…æ‹¬ä¸¤ä¸ªéƒ¨åˆ†ï¼š1ã€å®æ—¶æ•°æ® 2ã€é…ç½®
      *
      * @param context
      */
     void init(Map<String, Object> context);
     
 	/**
-     * ¸ù¾İµ¥¸öKEY·µ»ØÖµ
+     * æ ¹æ®å•ä¸ªKEYè¿”å›å€¼
      *
      * @param key
      *
@@ -35,26 +35,26 @@ public interface SocSessionStore {
     Object getAttribute(String key);
     
     /**
-     * ½«ÖµĞ´»Ø´æ´¢
+     * å°†å€¼å†™å›å­˜å‚¨
      * @param httpContext
      */
     void save(SocHttpContext httpContext);
 
     /**
-     * ½«Ö¸¶¨µÄÖµĞ´»Ø´æ´¢
+     * å°†æŒ‡å®šçš„å€¼å†™å›å­˜å‚¨
      * @param httpContext
      * @param key
      */
     void save(SocHttpContext httpContext, String key);
     
     /**
-     * ¹ıÆÚÊ§Ğ§
+     * è¿‡æœŸå¤±æ•ˆ
      * @param key
      */
     void invalidate(String key);
     
     /**
-     * ¹ıÆÚÊ§Ğ§È«²¿
+     * è¿‡æœŸå¤±æ•ˆå…¨éƒ¨
      */
     void invalidate();
 }
