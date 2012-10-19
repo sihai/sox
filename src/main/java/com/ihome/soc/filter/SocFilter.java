@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ihome.soc.SocHttpContext;
 import com.ihome.soc.SocRequest;
 import com.ihome.soc.crypter.BlowfishEncrypter;
+import com.ihome.soc.session.SocSession;
 import com.ihome.soc.util.SocConstants;
 
 /**
@@ -39,8 +40,17 @@ public class SocFilter extends AbstractFilter {
 
         req.setHttpContext(httpContext);
         req.setAttribute("LAZY_COMMIT_RESPONSE", Boolean.TRUE);
-
-        chain.doFilter(req, response);       
+        
+        try {
+        	chain.doFilter(req, response);
+        } catch (Throwable t) {
+        	
+        } finally {
+        	SocSession session = (SocSession)req.getSession();
+        	if(null != session) {
+        		session.commit();
+        	}
+        }
 	}
 
 	@Override

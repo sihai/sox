@@ -246,7 +246,19 @@ public class SocSession implements HttpSession {
 		return changedMarkMap;
 	}
 	
+	/**
+	 * 
+	 * @param httpContext
+	 */
 	public void setHttpContext(SocHttpContext httpContext) {
 		this.httpContext = httpContext;
 	}
+	
+	/**
+	 * 
+	 */
+	public void commit() {
+		getSessionManager().save();
+	}
+	
 }
