@@ -25,6 +25,7 @@ public class SocFilter extends AbstractFilter {
 
 	@Override
 	protected void init() throws ServletException {
+		// init encrypter
 		BlowfishEncrypter.setKey(getInitParameter(SocConstants.PARAMETER_KEY, SocConstants.DEFAULT_KEY));
 	}
 

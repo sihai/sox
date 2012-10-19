@@ -32,7 +32,7 @@ import com.ihome.soc.store.StoreType;
 public class SocSession implements HttpSession {
 	
 	private String             		sessionId           = null;
-	private HttpServletRequest 		request;
+	HttpServletRequest 				request				= null;
     private SocHttpContext     		httpContext         = null;
 	private Map<String, Boolean>	changedMarkMap      = new HashMap<String, Boolean>(); 	// 属性修改标记
     private Map<String, Object>     attributeMap        = new HashMap<String, Object>(); 					//session属性的内部保存
@@ -217,7 +217,7 @@ public class SocSession implements HttpSession {
 	 * @return
 	 */
 	public HttpServletRequest getRequest() {
-		return this.request;
+		return httpContext.getRequest();
 	}
 	
 	/**
