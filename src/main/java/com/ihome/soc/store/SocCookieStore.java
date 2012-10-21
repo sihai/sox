@@ -247,23 +247,24 @@ public class SocCookieStore implements SocSessionStore {
         if(config.isHttpOnly()) {
         	// 到Servlet 3.0后就不需要用下面这段代码了，可以直接cookie.setHttpOnly(true)
         	// 然后response.addCookie(cookie);
-        	StringBuilder cookieBuilder = new StringBuilder();
-        	cookieBuilder.append(cookieName);
-        	cookieBuilder.append("=");
+        	StringBuilder sb = new StringBuilder();
+        	sb.append(cookieName);
+        	sb.append("=");
         	if(cookieValue != null)
-        		cookieBuilder.append(cookieValue);
+        		sb.append(cookieValue);
         	else
-        		cookieBuilder.append("");
-        	cookieBuilder.append(";Domain=");
-        	cookieBuilder.append(cookie.getDomain());
-        	cookieBuilder.append(";Path=");
-        	cookieBuilder.append(cookie.getPath());
+        		sb.append("");
+        	sb.append(";Domain=");
+        	sb.append(cookie.getDomain());
+        	sb.append(";Path=");
+        	sb.append(cookie.getPath());
         	if(cookie.getMaxAge() > 0){
-	        	cookieBuilder.append(";Max-Age=");
-	        	cookieBuilder.append(cookie.getMaxAge());
+	        	sb.append(";Max-Age=");
+	        	sb.append(cookie.getMaxAge());
         	}
-        	cookieBuilder.append(";httpOnly");
-        	response.addHeader("Set-Cookie", cookieBuilder.toString());
+        	sb.append(";HttpOnly");
+        	response.addHeader("Set-Cookie", sb.toString());
+        	//response.addCookie(cookie);
         } else {
         	response.addCookie(cookie);
         }
