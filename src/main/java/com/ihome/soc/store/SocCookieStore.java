@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -58,7 +59,6 @@ public class SocCookieStore implements SocSessionStore {
         for (int i = 0; i < cookies.length; i++) {
             String name  = cookies[i].getName();
             String value = cookies[i].getValue();
-
             cookieMap.put(name, value);
         }
     }
@@ -248,23 +248,30 @@ public class SocCookieStore implements SocSessionStore {
         	// 到Servlet 3.0后就不需要用下面这段代码了，可以直接cookie.setHttpOnly(true)
         	// 然后response.addCookie(cookie);
         	StringBuilder sb = new StringBuilder();
-        	sb.append(cookieName);
-        	sb.append("=");
-        	if(cookieValue != null)
-        		sb.append(cookieValue);
-        	else
-        		sb.append("");
-        	sb.append(";Domain=");
+        	// kv
+        	sb.append(cookie.getName());
+        	sb.append(SocConstants.KEY_VALUE_SEPARATOR);
+        	sb.append(cookie.getValue());
+        	// Domain
+        	sb.append(SocConstants.COOKIE_SEPARATOR);
+        	sb.append(SocConstants.COOKIE_DOMAIN);
         	sb.append(cookie.getDomain());
-        	sb.append(";Path=");
+        	// Path
+        	sb.append(SocConstants.COOKIE_SEPARATOR);
+        	sb.append(SocConstants.COOKIE_PATH);
         	sb.append(cookie.getPath());
+        	// Expries
         	if(cookie.getMaxAge() > 0){
-	        	sb.append(";Max-Age=");
-	        	sb.append(cookie.getMaxAge());
+        		sb.append(SocConstants.COOKIE_EXPIRES);
+	        	sb.append(getCookieExpries(cookie));
         	}
-        	sb.append(";HttpOnly");
+        	
+        	// Http Only
+        	sb.append(SocConstants.COOKIE_SEPARATOR);
+        	sb.append(SocConstants.COOKIE_HTTP_ONLY);
+        	
+        	// OK
         	response.addHeader("Set-Cookie", sb.toString());
-        	//response.addCookie(cookie);
         } else {
         	response.addCookie(cookie);
         }
@@ -310,5 +317,20 @@ public class SocCookieStore implements SocSessionStore {
         }
 
         return attributeValue;
+    }
+    
+    private static String getCookieExpries(Cookie cookie) {
+    	
+    	String result = null;
+        int maxAge = cookie.getMaxAge();
+        if (maxAge > 0) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.SECOND, maxAge);
+            result = SocConstants.DATE_FORMAT.format(calendar);
+        } else { // maxAge == 0
+            result = SocConstants.DATE_FORMAT.format(0); // maxAge为0时表示需要删除该cookie，因此将时间设为最小时间，即1970年1月1日
+        }
+
+        return result;
     }
 }
