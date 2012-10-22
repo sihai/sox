@@ -34,7 +34,7 @@ public class SocResponse extends HttpServletResponseWrapper {
 	private static final Log logger = LogFactory.getLog(SocResponse.class);
 	
 	private int     status;						//
-	private boolean isWriterBuffered = true;	//
+	private boolean isWriterBuffered = false;	//
 	private boolean flushed;					//
 	
 	private SocSession session;					//

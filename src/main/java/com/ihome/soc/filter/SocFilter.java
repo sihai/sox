@@ -48,6 +48,7 @@ public class SocFilter extends AbstractFilter {
 			HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		
+		// 
 		SocRequest req = new SocRequest(request);
 		SocResponse res = new SocResponse(response, (SocSession)request.getSession());
         SocHttpContext httpContext = new SocHttpContext(req, response, getServletContext());
