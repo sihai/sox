@@ -67,6 +67,14 @@ public class SocDefaultSessionManager implements SocSessionManager {
 		// 内部字段
 		SessionAttributeConfig config = new SessionAttributeConfig();
 		config.setName(SocConstants.SOC_SESSION_ID);
+		config.setAlias(SocConstants.SOC_SESSION_ID);
+		config.setLifeTime(SocConstants.DEFAULT_LIFE_CYCLE);
+		config.setHttpOnly(true);
+		sessionAttributeConfigMap.put(config.getName(), config);
+		
+		config = new SessionAttributeConfig();
+		config.setName(SocConstants.SOC_LAST_VISIT_TIME);
+		config.setAlias(SocConstants.SOC_LAST_VISIT_TIME);
 		config.setLifeTime(SocConstants.DEFAULT_LIFE_CYCLE);
 		config.setHttpOnly(true);
 		sessionAttributeConfigMap.put(config.getName(), config);

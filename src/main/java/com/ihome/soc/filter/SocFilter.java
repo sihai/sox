@@ -5,6 +5,7 @@
 package com.ihome.soc.filter;
 
 import java.io.IOException;
+import java.sql.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -58,11 +59,8 @@ public class SocFilter extends AbstractFilter {
         	chain.doFilter(req, res);
         } finally {
         	SocSession session = (SocSession)req.getSession();
+        	session.setAttribute(SocConstants.SOC_LAST_VISIT_TIME, System.currentTimeMillis());
         	if(null != session) {
-        		Cookie cookie = new Cookie("test2", "value");
-        		cookie.setPath("/");
-        		cookie.setMaxAge(1800);
-        		response.addCookie(cookie);
         		session.commit();
         		// 
         		if(response.containsHeader(SocConstants.SET_COOKIE) && !response.containsHeader("P3P")){

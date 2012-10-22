@@ -247,31 +247,31 @@ public class SocCookieStore implements SocSessionStore {
         if(config.isHttpOnly()) {
         	// 到Servlet 3.0后就不需要用下面这段代码了，可以直接cookie.setHttpOnly(true)
         	// 然后response.addCookie(cookie);
-        	StringBuilder cookieBuilder = new StringBuilder();
+        	StringBuilder sb = new StringBuilder();
         	// kv
-        	cookieBuilder.append(cookie.getName());
-        	cookieBuilder.append(SocConstants.KEY_VALUE_SEPARATOR);
-        	cookieBuilder.append(cookie.getValue());
+        	sb.append(cookie.getName());
+        	sb.append(SocConstants.KEY_VALUE_SEPARATOR);
+        	sb.append(cookie.getValue());
         	// Domain
-        	cookieBuilder.append(SocConstants.COOKIE_SEPARATOR);
-        	cookieBuilder.append(SocConstants.COOKIE_DOMAIN);
-        	cookieBuilder.append(cookie.getDomain());
+        	sb.append(SocConstants.COOKIE_SEPARATOR);
+        	sb.append(SocConstants.COOKIE_DOMAIN);
+        	sb.append(cookie.getDomain());
         	// Path
-        	cookieBuilder.append(SocConstants.COOKIE_SEPARATOR);
-        	cookieBuilder.append(SocConstants.COOKIE_PATH);
-        	cookieBuilder.append(cookie.getPath());
+        	sb.append(SocConstants.COOKIE_SEPARATOR);
+        	sb.append(SocConstants.COOKIE_PATH);
+        	sb.append(cookie.getPath());
         	// Expries
         	if(cookie.getMaxAge() > 0){
-        		cookieBuilder.append(SocConstants.COOKIE_EXPIRES);
-	        	cookieBuilder.append(getCookieExpries(cookie));
+        		sb.append(SocConstants.COOKIE_EXPIRES);
+	        	sb.append(getCookieExpries(cookie));
         	}
         	
         	// Http Only
-        	cookieBuilder.append(SocConstants.COOKIE_SEPARATOR);
-        	cookieBuilder.append(SocConstants.COOKIE_HTTP_ONLY);
+        	sb.append(SocConstants.COOKIE_SEPARATOR);
+        	sb.append(SocConstants.COOKIE_HTTP_ONLY);
         	
         	// OK
-        	response.addHeader("Set-Cookie", cookieBuilder.toString());
+        	response.addHeader("Set-Cookie", sb.toString());
         } else {
         	response.addCookie(cookie);
         }
