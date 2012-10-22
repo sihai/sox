@@ -49,7 +49,7 @@ public class SocFilter extends AbstractFilter {
 			throws IOException, ServletException {
 		
 		SocRequest req = new SocRequest(request);
-		SocResponse res = new SocResponse(response);
+		SocResponse res = new SocResponse(response, (SocSession)request.getSession());
         SocHttpContext httpContext = new SocHttpContext(req, response, getServletContext());
 
         req.setHttpContext(httpContext);
@@ -62,13 +62,9 @@ public class SocFilter extends AbstractFilter {
         	session.setAttribute(SocConstants.SOC_LAST_VISIT_TIME, System.currentTimeMillis());
         	if(null != session) {
         		session.commit();
-        		// 
-        		if(response.containsHeader(SocConstants.SET_COOKIE) && !response.containsHeader("P3P")){
-        			response.setHeader("P3P", "CP='CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR'");
-        		}
-        		// 
-        		res.commit();
         	}
+        	// 
+    		res.commit();
         }
 	}
 

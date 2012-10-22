@@ -22,9 +22,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.ihome.soc.session.SocSession;
+import com.ihome.soc.util.SocConstants;
 
 /**
- * 
+ * 对HttpServletResponse的包装, 确保cookie正常
  * @author sihai
  *
  */
@@ -32,11 +33,11 @@ public class SocResponse extends HttpServletResponseWrapper {
 
 	private static final Log logger = LogFactory.getLog(SocResponse.class);
 	
-	private int     status;
-	private boolean isWriterBuffered = true;
-	private boolean flushed;
+	private int     status;						//
+	private boolean isWriterBuffered = true;	//
+	private boolean flushed;					//
 	
-	private SocSession session;
+	private SocSession session;					//
 	 
 	private String sendRedirect;		// 
 	private SendError sendError;		// 
@@ -47,12 +48,13 @@ public class SocResponse extends HttpServletResponseWrapper {
     private ServletOutputStream writerAdapter;	//
 	
 	/**
-     * 默认构造函数
-     *
-     * @param response
-     */
-    public SocResponse(HttpServletResponse response) {
+	 * 构造函数
+	 * @param response
+	 * @param session
+	 */
+    public SocResponse(HttpServletResponse response, SocSession session) {
         super(response);
+        this.session = session;
         this.flushed = false;
     }
     
@@ -114,11 +116,11 @@ public class SocResponse extends HttpServletResponseWrapper {
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
         
-    	if (stream != null) {
+    	if (null != stream) {
             return stream;
         }
 
-        if (writer != null) {
+        if (null != writer) {
             // 如果getWriter方法已经被调用，则将writer转换成OutputStream
             // 这样做会增加少量额外的内存开销，但标准的servlet engine不会遇到这种情形，
             // 只有少数servlet engine需要这种做法（resin）。
@@ -130,12 +132,14 @@ public class SocResponse extends HttpServletResponseWrapper {
                 return writerAdapter;
             }
         }
+        
         if (this.isWriterBuffered) {
         	ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             stream = new BufferedServletOutputStream(bytes);
             logger.debug("Created new byte buffer");
             return stream;
 		} else {
+			// 提前保存cookie
 			session.commit();
 			return super.getOutputStream();
 		}
@@ -166,6 +170,7 @@ public class SocResponse extends HttpServletResponseWrapper {
 			logger.debug("Created new character buffer");
 			return writer;
 		} else {
+			// 提前保存cookie
 			session.commit();
 			return super.getWriter();
 		}
@@ -178,12 +183,12 @@ public class SocResponse extends HttpServletResponseWrapper {
      */
     @Override
     public void setContentLength(int length) {
-    	if(!isWriterBuffered)
+    	if(!isWriterBuffered) {
           super.setContentLength(length);
+    	}
     }
     
     /**
-     * @wuyuan.lfk
      * 对writer、stream都进行判空，如果都为null，则执行父类的方法
      */
     @Override
@@ -221,7 +226,7 @@ public class SocResponse extends HttpServletResponseWrapper {
     
 
     /**
-     * 
+     * 提交response
      * @throws IOException
      */
     public void commit() throws IOException {
@@ -230,6 +235,11 @@ public class SocResponse extends HttpServletResponseWrapper {
              logger.debug("Set HTTP status to " + status);
              super.setStatus(status);
          }
+    	 
+    	 // 
+    	 if(containsHeader(SocConstants.SET_COOKIE) && !containsHeader("P3P")){
+    		 setHeader("P3P", "CP='CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR'");
+    	 }
 
          if (sendError != null) {
              if (sendError.message == null) {
@@ -271,6 +281,7 @@ public class SocResponse extends HttpServletResponseWrapper {
      * 冲洗buffer adapter，确保adapter中的信息被写入buffer中。
      */
     private void flushBufferAdapter() {
+    	
         if (streamAdapter != null) {
             streamAdapter.flush();
         }
@@ -332,13 +343,10 @@ public class SocResponse extends HttpServletResponseWrapper {
             ByteArray bytes = buffer.toByteArray();
 
             if (bytes.getLength() > 0) {
-                ByteArrayInputStream inputBytes = new ByteArrayInputStream(bytes.getBytes(), bytes.getOffset(), bytes
-                        .getLength());
+                ByteArrayInputStream inputBytes = new ByteArrayInputStream(bytes.getBytes(), bytes.getOffset(), bytes.getLength());
                 InputStreamReader reader = new InputStreamReader(inputBytes, charset);
-
                 io(reader, writer);
                 writer.flush();
-
                 buffer.reset();
             }
         }
