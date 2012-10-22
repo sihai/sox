@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.ihome.soc.SocHttpContext;
 import com.ihome.soc.SocRequest;
+import com.ihome.soc.SocResponse;
 import com.ihome.soc.crypter.BlowfishEncrypter;
 import com.ihome.soc.session.SocSession;
 import com.ihome.soc.session.SocSingletonSessionManagerFactory;
@@ -47,13 +48,14 @@ public class SocFilter extends AbstractFilter {
 			throws IOException, ServletException {
 		
 		SocRequest req = new SocRequest(request);
+		SocResponse res = new SocResponse(response);
         SocHttpContext httpContext = new SocHttpContext(req, response, getServletContext());
 
         req.setHttpContext(httpContext);
         //req.setAttribute("LAZY_COMMIT_RESPONSE", Boolean.TRUE);
         
         try {
-        	chain.doFilter(req, response);
+        	chain.doFilter(req, res);
         } finally {
         	SocSession session = (SocSession)req.getSession();
         	if(null != session) {
@@ -66,6 +68,8 @@ public class SocFilter extends AbstractFilter {
         		if(response.containsHeader(SocConstants.SET_COOKIE) && !response.containsHeader("P3P")){
         			response.setHeader("P3P", "CP='CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR'");
         		}
+        		// 
+        		res.commit();
         	}
         }
 	}
