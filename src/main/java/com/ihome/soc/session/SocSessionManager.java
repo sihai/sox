@@ -17,6 +17,9 @@ public interface SocSessionManager {
 	
 	String CONFIG_FILE_NAME = "soc.properties";
 	
+	String SOC_SESSION = "soc.session";
+	String SOC_SESSION_TIMEOUT = SOC_SESSION + ".timeout";
+	
 	String SOC_ATTRIBUTS = "soc.attributes";
 	
 	String SOC_ATTRIBUT = "soc.attribute";

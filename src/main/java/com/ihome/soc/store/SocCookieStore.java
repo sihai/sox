@@ -235,6 +235,7 @@ public class SocCookieStore implements SocSessionStore {
         }
 
         cookie.setPath(cookiePath);
+        
         if (lifeTime > 0) {
             cookie.setMaxAge(lifeTime);
         }
@@ -252,17 +253,26 @@ public class SocCookieStore implements SocSessionStore {
         	sb.append(cookie.getName());
         	sb.append(SocConstants.KEY_VALUE_SEPARATOR);
         	sb.append(cookie.getValue());
+        	
         	// Domain
-        	sb.append(SocConstants.COOKIE_SEPARATOR);
-        	sb.append(SocConstants.COOKIE_DOMAIN);
-        	sb.append(cookie.getDomain());
+        	if(StringUtils.isNotBlank(cookie.getDomain())) {
+        		sb.append(SocConstants.COOKIE_SEPARATOR);
+        		sb.append(SocConstants.COOKIE_DOMAIN);
+        		sb.append(SocConstants.KEY_VALUE_SEPARATOR);
+        		sb.append(cookie.getDomain());
+        	}
+        	
         	// Path
         	sb.append(SocConstants.COOKIE_SEPARATOR);
         	sb.append(SocConstants.COOKIE_PATH);
+        	sb.append(SocConstants.KEY_VALUE_SEPARATOR);
         	sb.append(cookie.getPath());
+        	
         	// Expries
         	if(cookie.getMaxAge() > 0){
+        		sb.append(SocConstants.COOKIE_SEPARATOR);
         		sb.append(SocConstants.COOKIE_EXPIRES);
+        		sb.append(SocConstants.KEY_VALUE_SEPARATOR);
 	        	sb.append(getCookieExpries(cookie));
         	}
         	
@@ -271,7 +281,7 @@ public class SocCookieStore implements SocSessionStore {
         	sb.append(SocConstants.COOKIE_HTTP_ONLY);
         	
         	// OK
-        	response.addHeader("Set-Cookie", sb.toString());
+        	response.addHeader(SocConstants.SET_COOKIE, sb.toString());
         } else {
         	response.addCookie(cookie);
         }

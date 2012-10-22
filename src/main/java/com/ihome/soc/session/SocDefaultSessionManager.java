@@ -64,27 +64,48 @@ public class SocDefaultSessionManager implements SocSessionManager {
 	 */
 	public void init(Properties properties) {
 		
-		// 内部字段
+		int sessionTimeout = SocConstants.DEFAULT_LIFE_CYCLE;
+		String key = null;
+		String value = null;
+		
+		// 全局配置
+		key = SOC_SESSION_TIMEOUT;
+		value = properties.getProperty(key);
+		if(StringUtils.isNotBlank(value)) {
+			try {
+				sessionTimeout = Integer.valueOf(StringUtils.trim(value));
+			} catch (NumberFormatException e) {
+				throw new IllegalArgumentException(String.format("Value of %s property only allow big than 0 integer", key));
+			}
+		}
+		
+		// 系统内部字段
 		SessionAttributeConfig config = new SessionAttributeConfig();
 		config.setName(SocConstants.SOC_SESSION_ID);
 		config.setAlias(SocConstants.SOC_SESSION_ID);
-		config.setLifeTime(SocConstants.DEFAULT_LIFE_CYCLE);
+		config.setLifeTime(sessionTimeout);
+		config.setEncrypt(true);
 		config.setHttpOnly(true);
+		config.setBase64(true);
 		sessionAttributeConfigMap.put(config.getName(), config);
 		
 		config = new SessionAttributeConfig();
 		config.setName(SocConstants.SOC_LAST_VISIT_TIME);
 		config.setAlias(SocConstants.SOC_LAST_VISIT_TIME);
-		config.setLifeTime(SocConstants.DEFAULT_LIFE_CYCLE);
+		config.setLifeTime(sessionTimeout);
+		config.setEncrypt(true);
 		config.setHttpOnly(true);
+		config.setBase64(true);
 		sessionAttributeConfigMap.put(config.getName(), config);
 		
 		// 拿到所有的字段
-		String key = null;
-		String value = properties.getProperty(SOC_ATTRIBUTS);
+		key = null;
+		value = properties.getProperty(SOC_ATTRIBUTS);
 		if(StringUtils.isBlank(value)) {
 			throw new IllegalArgumentException(String.format("Please config %s property, or if you no need, please not use soc", SOC_ATTRIBUTS));
 		}
+		
+		// TODO 避免和系统保留字段重复
 		
 		String[] attributes = StringUtils.trim(value).split(",");
 		if(0 == attributes.length) {

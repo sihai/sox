@@ -57,7 +57,6 @@ public class SocFilter extends AbstractFilter {
         	chain.doFilter(req, response);
         } finally {
         	SocSession session = (SocSession)req.getSession();
-        	session.setAttribute(SocConstants.SOC_LAST_VISIT_TIME, System.currentTimeMillis());
         	if(null != session) {
         		session.commit();
         		// 
@@ -65,6 +64,8 @@ public class SocFilter extends AbstractFilter {
         			response.setHeader("P3P", "CP='CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR'");
         		}
         	}
+        	logger.info(request);
+        	logger.info(response);
         }
 	}
 

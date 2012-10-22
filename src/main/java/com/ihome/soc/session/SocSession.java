@@ -185,6 +185,10 @@ public class SocSession implements HttpSession {
 	public void invalidate() {
 		getSessionManager().invalidate();
 	}
+	
+	public void invalidate(String key) {
+		getSessionManager().invalidate();
+	}
 
 	@Override
 	public boolean isNew() {
@@ -258,6 +262,13 @@ public class SocSession implements HttpSession {
 	 * 
 	 */
 	public void commit() {
+		// 使session失效
+		Long lastVisitTime = (Long)getAttribute(SocConstants.SOC_LAST_VISIT_TIME);
+		if(null != lastVisitTime && System.currentTimeMillis() - lastVisitTime > SocConstants.DEFAULT_LIFE_CYCLE) {
+			this.removeAttribute(SocConstants.SOC_LAST_VISIT_TIME);
+		} else if(null == lastVisitTime) {
+			this.setAttribute(SocConstants.SOC_LAST_VISIT_TIME, System.currentTimeMillis());
+		}
 		getSessionManager().save();
 	}
 	
