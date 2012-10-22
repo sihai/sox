@@ -64,7 +64,7 @@ public class SocFilter extends AbstractFilter {
         	if(null != session) {
         		session.commit();
         	}
-        	// 
+        	// commit response
     		res.commit();
         }
 	}
