@@ -44,7 +44,7 @@ public interface SocSessionManager {
 	
 	/**
 	 * 使过期的session值失效
-	 *
+	 *invalidate
 	 */
 	void invalidate();
 	

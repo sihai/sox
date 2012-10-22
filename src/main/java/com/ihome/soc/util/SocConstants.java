@@ -16,6 +16,8 @@ import org.apache.commons.lang.time.FastDateFormat;
  */
 public class SocConstants {
 	
+	public static final String LOCATION = "Location";
+	
 	public static final String KEY_VALUE_SEPARATOR = "=";
 	
 	public static final String DEFAULT_CHARSET = "utf-8";			// 
