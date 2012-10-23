@@ -1,1 +1,1 @@
-An session framework over cookie of java servlet
+An session framework over XXX (Any store, cookie, memcache, database ...) of java servlet

@@ -2,12 +2,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ihome</groupId>
-	<artifactId>soc</artifactId>
+	<artifactId>sox</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>soc</name>
-	<url>https://github.com/sihai/soc</url>
+	<url>https://github.com/sihai/sox</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -70,7 +70,7 @@
 	</dependencies>
 	
 	<build>
-		<finalName>soc</finalName>
+		<finalName>sox</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
