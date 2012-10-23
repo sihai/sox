@@ -197,6 +197,8 @@ public class CookieStore implements SessionStore {
         	return Float.valueOf(result);
         } else if (config.getDataType() == DataType.Double) {
         	return Double.valueOf(result);
+        }  else if (config.getDataType() == DataType.Boolean) {
+        	return Boolean.valueOf(result);
         } 
         return result;
     }
