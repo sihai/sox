@@ -50,7 +50,7 @@ public class SoxFilter extends AbstractFilter {
 		
 		// 
 		SoxRequest req = new SoxRequest(request);
-		SoxResponse res = new SoxResponse(response, (SoxSession)request.getSession());
+		SoxResponse res = new SoxResponse(response, (SoxSession)req.getSession());
         SoxHttpContext httpContext = new SoxHttpContext(req, response, getServletContext());
 
         req.setHttpContext(httpContext);
