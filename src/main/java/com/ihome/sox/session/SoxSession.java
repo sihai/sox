@@ -45,6 +45,8 @@ public class SoxSession implements HttpSession {
     // 
     Map<StoreType, SessionStore> sessionStoreMap = new HashMap<StoreType, SessionStore>();
     
+    private boolean isCommited = false;
+    
     /**
      * 构造函数，以便将通过系统获得容器的SESSION
      *
@@ -262,14 +264,17 @@ public class SoxSession implements HttpSession {
 	 * 
 	 */
 	public void commit() {
-		// 使session失效
-		Long lastVisitTime = (Long)getAttribute(SoxConstants.SOX_LAST_VISIT_TIME);
-		if(null != lastVisitTime && System.currentTimeMillis() - lastVisitTime > SoxConstants.DEFAULT_LIFE_CYCLE) {
-			this.removeAttribute(SoxConstants.SOX_LAST_VISIT_TIME);
-		} else if(null == lastVisitTime) {
-			this.setAttribute(SoxConstants.SOX_LAST_VISIT_TIME, System.currentTimeMillis());
+		if(!isCommited) {
+			isCommited = true;
+			// 使session失效
+			Long lastVisitTime = (Long)getAttribute(SoxConstants.SOX_LAST_VISIT_TIME);
+			if(null != lastVisitTime && System.currentTimeMillis() - lastVisitTime > SoxConstants.DEFAULT_LIFE_CYCLE) {
+				this.removeAttribute(SoxConstants.SOX_LAST_VISIT_TIME);
+			} else if(null == lastVisitTime) {
+				this.setAttribute(SoxConstants.SOX_LAST_VISIT_TIME, System.currentTimeMillis());
+			}
+			getSessionManager().save();
 		}
-		getSessionManager().save();
 	}
 	
 }

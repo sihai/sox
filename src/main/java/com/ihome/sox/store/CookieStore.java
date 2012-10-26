@@ -16,6 +16,7 @@ import java.util.Random;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -173,15 +174,13 @@ public class CookieStore implements SessionStore {
         //如果是加密过的
         if (config.isEncrypt()) {
             BlowfishEncrypter encrypter = BlowfishEncrypter.getEncrypter();
-            result = encrypter.decrypt(value);
+            result = encrypter.decrypt(result);
             if (config.isBase64() && (result != null) && (result.length() > 6)) {
                 //去掉BASE64时增加的头
             	result = result.substring(6);
             }
-        } else {
-            if (config.isBase64()) {
-            	result = Decoder.decode(result);
-            }
+        } else if (config.isBase64()) {
+            result = new String(Base64.decodeBase64(result));
         }
         
         if(config.getDataType() == DataType.String) {
@@ -338,11 +337,11 @@ public class CookieStore implements SessionStore {
             }
             BlowfishEncrypter encrypter = BlowfishEncrypter.getEncrypter();
             attributeValue = encrypter.encrypt(attributeValue);
-        } else {
-            if (config.isBase64()) {
-                attributeValue = Enecoder.encode(attributeValue);
-            }
+        } else if (config.isBase64()) {
+        	attributeValue = new String(Base64.encodeBase64URLSafe(attributeValue.getBytes()));
         }
+        
+        attributeValue = Enecoder.encode(attributeValue);
 
         return attributeValue;
     }
