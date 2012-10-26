@@ -100,6 +100,7 @@ public class CookieStore implements SessionStore {
             Object v = parseValue(config, cookieValue);
             // cache
             cacheAttributeMap.put(key, null == v ? Null.getInstance() : v);
+            return v;
         }
 
         return null;
