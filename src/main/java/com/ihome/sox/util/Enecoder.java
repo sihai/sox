@@ -4,7 +4,8 @@
  */
 package com.ihome.sox.util;
 
-import org.apache.commons.codec.binary.Base64;
+import java.net.URLEncoder;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,7 +31,7 @@ public class Enecoder {
 
         try {
             if (StringUtils.isNotBlank(aStr)) {
-                result = new String(Base64.encodeBase64(aStr.getBytes()));
+            	result = URLEncoder.encode(aStr, SoxConstants.DEFAULT_CHARSET);
             }
         } catch (Exception ex) {
         	logger.warn(" encode base error", ex);

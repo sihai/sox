@@ -4,7 +4,8 @@
  */
 package com.ihome.sox.util;
 
-import org.apache.commons.codec.binary.Base64;
+import java.net.URLDecoder;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,8 +31,7 @@ public class Decoder {
         String result = null;
         if (StringUtils.isNotBlank(encoded)) {
             try {
-                byte[] decoded = Base64.decodeBase64(encoded.getBytes());
-                result = new String(decoded);
+            	result = URLDecoder.decode(encoded, SoxConstants.DEFAULT_CHARSET);
             } catch (Exception e) {
             	logger.warn(" decode base error", e);
                 result = "";

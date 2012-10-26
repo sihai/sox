@@ -93,7 +93,7 @@ public class BlowfishEncrypter {
                 byte[] utf8 = str.getBytes();
                 byte[] enc = enCipher.doFinal(utf8);
 
-                result = new String(Base64.encodeBase64(enc)); 
+                result = new String(enc); 
             } catch (Exception ex) {
                 logger.error("encrypt exception!", ex);
             }
@@ -112,8 +112,7 @@ public class BlowfishEncrypter {
 
         if (!StringUtils.isBlank(str)) {
             try {
-                byte[] dec = Base64.decodeBase64(str.getBytes());
-                result = new String(deCipher.doFinal(dec));
+                result = new String(deCipher.doFinal(str.getBytes()));
             } catch (Exception ex) {
                 logger.warn("string to decrypt is:" + str
                           + " decrypt exception. cookie is reset to zero length String! ", ex);

@@ -4,9 +4,6 @@
  */
 package com.ihome.sox.store;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -162,11 +159,11 @@ public class CookieStore implements SessionStore {
         }
         
         try {
-        	result = URLDecoder.decode(value, "UTF-8");
+        	result = Decoder.decode(value);
         } catch (IllegalArgumentException e) {
         	logger.error(String.format("decode %s failed", config.getAlias()), e);
             return result;
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
         	logger.error(String.format("decode %s failed", config.getAlias()), e);
             return result;
         }
@@ -235,7 +232,6 @@ public class CookieStore implements SessionStore {
         Cookie cookie = null;
 
         if (cookieValue != null) {
-        	cookieValue = URLEncoder.encode(cookieValue, SoxConstants.DEFAULT_CHARSET);
             cookie = new Cookie(cookieName, cookieValue);
         } else {
             cookie = new Cookie(cookieName, "");
@@ -338,7 +334,7 @@ public class CookieStore implements SessionStore {
             BlowfishEncrypter encrypter = BlowfishEncrypter.getEncrypter();
             attributeValue = encrypter.encrypt(attributeValue);
         } else if (config.isBase64()) {
-        	attributeValue = new String(Base64.encodeBase64URLSafe(attributeValue.getBytes()));
+        	attributeValue = new String(Base64.encodeBase64(attributeValue.getBytes()));
         }
         
         attributeValue = Enecoder.encode(attributeValue);
