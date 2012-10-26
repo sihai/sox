@@ -60,11 +60,9 @@ public class BlowfishEncrypter {
     
     public String getByteString(byte[] b) {
         StringBuffer s = new StringBuffer(b.length * 3);
-
         for (int i = 0; i < b.length; i++) {
             s.append("|" + Integer.toHexString(b[i] & 0xff).toUpperCase());
         }
-
         return s.toString();
     }
 
@@ -90,10 +88,8 @@ public class BlowfishEncrypter {
 
         if (!StringUtils.isBlank(str)) {
             try {
-                byte[] utf8 = str.getBytes();
-                byte[] enc = enCipher.doFinal(utf8);
-
-                result = new String(enc); 
+                byte[] enc = enCipher.doFinal(str.getBytes());
+                result = new String(Base64.encodeBase64(enc));; 
             } catch (Exception ex) {
                 logger.error("encrypt exception!", ex);
             }
@@ -112,7 +108,7 @@ public class BlowfishEncrypter {
 
         if (!StringUtils.isBlank(str)) {
             try {
-                result = new String(deCipher.doFinal(str.getBytes()));
+                result = new String(deCipher.doFinal(Base64.decodeBase64(str.getBytes())));
             } catch (Exception ex) {
                 logger.warn("string to decrypt is:" + str
                           + " decrypt exception. cookie is reset to zero length String! ", ex);

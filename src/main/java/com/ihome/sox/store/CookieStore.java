@@ -4,10 +4,12 @@
  */
 package com.ihome.sox.store;
 
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 
 import javax.servlet.http.Cookie;
@@ -21,11 +23,14 @@ import org.apache.commons.logging.LogFactory;
 import com.ihome.sox.SoxHttpContext;
 import com.ihome.sox.crypter.BlowfishEncrypter;
 import com.ihome.sox.session.DataType;
+import com.ihome.sox.session.DefaultSessionManager;
 import com.ihome.sox.session.SessionAttributeConfig;
+import com.ihome.sox.session.SingletonSessionManagerFactory;
 import com.ihome.sox.session.SoxSession;
 import com.ihome.sox.util.Decoder;
 import com.ihome.sox.util.Enecoder;
 import com.ihome.sox.util.Null;
+import com.ihome.sox.util.SessionAttributeConfigParser;
 import com.ihome.sox.util.SoxConstants;
 
 /**
@@ -69,7 +74,9 @@ public class CookieStore implements SessionStore {
     public void init(Map<String, Object> context) {
         this.session  = (SoxSession) context.get(SESSION);
         this.sessionAttributeConfigMap = (Map<String, SessionAttributeConfig>) context.get(CONFIG);
-        this.init(session.getRequest().getCookies());
+        // For test
+        if(null != session.getRequest())
+        	this.init(session.getRequest().getCookies());
     }
     
 	@Override
@@ -355,5 +362,37 @@ public class CookieStore implements SessionStore {
         }
 
         return result;
+    }
+    
+    /**
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
+    	try {
+    		BlowfishEncrypter.setKey("378206");
+    		System.out.println(BlowfishEncrypter.getEncrypter().decrypt(BlowfishEncrypter.getEncrypter().encrypt("1234567890")));
+    		
+    		SingletonSessionManagerFactory.init(SoxConstants.DEFAULT_CONFIG_FILE_NAME);
+			Properties properties = new Properties();
+			properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(SoxConstants.DEFAULT_CONFIG_FILE_NAME));
+			DefaultSessionManager sessionManager = new DefaultSessionManager();
+	    	sessionManager.init();
+	    	CookieStore cookieStore = new CookieStore();
+	    	cookieStore.sessionAttributeConfigMap = SessionAttributeConfigParser.parse(properties);
+	    	cookieStore.session = new SoxSession(null);
+	    	Long value = System.currentTimeMillis();
+	    	cookieStore.session.setAttribute(SoxConstants.SOX_LAST_VISIT_TIME, value);
+	    	String encodedValue = cookieStore.getCookieValue(cookieStore.sessionAttributeConfigMap.get(SoxConstants.SOX_LAST_VISIT_TIME));
+	    	Object decodedValue = cookieStore.parseValue(cookieStore.sessionAttributeConfigMap.get(SoxConstants.SOX_LAST_VISIT_TIME), encodedValue);
+	    	System.out.println(value);
+	    	System.out.println(encodedValue);
+	    	System.out.println(decodedValue);
+	    	System.out.println(value.equals(decodedValue));
+    	} catch (IOException e) {
+			throw new IllegalArgumentException("SOC init failed", e);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 }

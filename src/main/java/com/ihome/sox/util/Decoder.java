@@ -1,6 +1,6 @@
 /*
  * ihome inc.
- * soc
+ * sox
  */
 package com.ihome.sox.util;
 
