@@ -161,7 +161,7 @@ public class CookieStore implements SessionStore {
     private Object parseValue(SessionAttributeConfig config, String value) {
         
     	String result = null;
-        if (value == null) {
+        if (StringUtils.isBlank(value)) {
             return result;
         }
         

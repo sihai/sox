@@ -266,13 +266,7 @@ public class SoxSession implements HttpSession {
 	public void commit() {
 		if(!isCommited) {
 			isCommited = true;
-			// 使session失效
-			Long lastVisitTime = (Long)getAttribute(SoxConstants.SOX_LAST_VISIT_TIME);
-			if(null != lastVisitTime && System.currentTimeMillis() - lastVisitTime > SoxConstants.DEFAULT_LIFE_CYCLE) {
-				this.removeAttribute(SoxConstants.SOX_LAST_VISIT_TIME);
-			} else if(null == lastVisitTime) {
-				this.setAttribute(SoxConstants.SOX_LAST_VISIT_TIME, System.currentTimeMillis());
-			}
+			this.setAttribute(SoxConstants.SOX_LAST_VISIT_TIME, System.currentTimeMillis());
 			getSessionManager().save();
 		}
 	}
