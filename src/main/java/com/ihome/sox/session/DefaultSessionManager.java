@@ -109,7 +109,7 @@ public class DefaultSessionManager implements SessionManager {
 		for (Iterator<Entry<String, SessionAttributeConfig>> iterator = sessionAttributeConfigMap.entrySet().iterator(); iterator.hasNext();) {
 			Entry<String, SessionAttributeConfig> e = iterator.next();
 			SessionAttributeConfig config = e.getValue();
-			if (config.getLifeTime() <= 0 && null != config.getStoreType()) { // 说明需要处理
+			if (config.getLifeTime() >= 0 && null != config.getStoreType()) { // 说明需要处理
 				getStore(config.getStoreType()).invalidate(e.getKey());
 			}
 		}	
